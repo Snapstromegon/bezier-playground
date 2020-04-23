@@ -38,4 +38,5 @@ bz.mode = modeSelector.value;
 
 const renderDetail = document.querySelector('#render_detail');
 renderDetail.addEventListener('change', (e) => bz.renderStepCount = renderDetail.value);
+renderDetail.addEventListener('input', (e) => bz.renderStepCount = renderDetail.value);
 bz.renderStepCount = renderDetail.value;
