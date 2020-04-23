@@ -23,9 +23,16 @@ export default class Canvas {
   }
 
   resize() {
+    const buffer = this.#ctx.getImageData(
+      0,
+      0,
+      this.#canvas.width,
+      this.#canvas.height
+    );
     const bcr = this.#canvas.getBoundingClientRect();
     this.#canvas.width = bcr.width;
     this.#canvas.height = bcr.height;
+    this.#ctx.putImageData(buffer, 0, 0);
   }
 
   reset() {
@@ -44,9 +51,34 @@ export default class Canvas {
     this.#ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
   }
 
-  fillText(text, x, y, color = '#000000') {
+  fillText(
+    text,
+    x,
+    y,
+    color = '#000000',
+    font = '12px Arial',
+    textAlign = 'start'
+  ) {
     this.#ctx.fillStyle = color;
+    this.#ctx.font = font;
+    this.#ctx.textAlign = textAlign;
     this.#ctx.fillText(text, x, y);
+  }
+
+  strokeText(
+    text,
+    x,
+    y,
+    color = '#000000',
+    lineWidth = 1,
+    font = '12px Arial',
+    textAlign = 'start'
+  ) {
+    this.#ctx.strokeStyle = color;
+    this.#ctx.lineWidth = lineWidth;
+    this.#ctx.font = font;
+    this.#ctx.textAlign = textAlign;
+    this.#ctx.strokeText(text, x, y);
   }
 
   drawLine(x1, y1, x2, y2, width, color = '#000') {

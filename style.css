@@ -21,7 +21,7 @@ body {
   background-color: #fff;
 }
 
-#c {
+canvas {
   width: 100%;
   height: 500px;
   background: #fff;

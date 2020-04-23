@@ -81,7 +81,7 @@ export default class Bezier {
         i < points.length;
         last = points[i], i++, current = points[i]
       ) {
-        this.#canvas.drawLine(current.x, current.y, last.x, last.y, 3, `hsla(${iteration*20},100%,50%,0.5)`);
+        this.#canvas.drawLine(current.x, current.y, last.x, last.y, 3, `hsla(${iteration*20},100%,75%,0.5)`);
         nextPoints.push(this.recursive([last, current], t));
       }
       this.drawRecursiveTimeStateLines(t, nextPoints, iteration+1);
