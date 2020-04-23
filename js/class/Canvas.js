@@ -48,4 +48,13 @@ export default class Canvas {
     this.#ctx.fillStyle = color;
     this.#ctx.fillText(text, x, y);
   }
+
+  drawLine(x1, y1, x2, y2, width, color = '#000') {
+    this.#ctx.strokeStyle = color;
+    this.#ctx.beginPath();
+    this.#ctx.lineWidth = width;
+    this.#ctx.moveTo(x1, y1);
+    this.#ctx.lineTo(x2, y2);
+    this.#ctx.stroke();
+  }
 }

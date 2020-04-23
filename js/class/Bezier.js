@@ -14,6 +14,8 @@ export default class Bezier {
    */
   #canvas;
   #mode;
+  #drawSingle = true;
+  #singleDrawTime = 0.5;
 
   constructor(canvas) {
     this.#canvas = canvas;
@@ -29,11 +31,29 @@ export default class Bezier {
     this.draw();
   }
 
+  set singleDrawTime(value) {
+    this.#singleDrawTime = value;
+    this.draw();
+  }
+
+  set drawSingle(value) {
+    this.#drawSingle = value;
+    this.draw();
+  }
+
   draw() {
     this.#canvas.reset();
-    switch (this.#mode) {
-      case 'Recursive':
-        this.drawRecursive();
+
+    if (this.#drawSingle) {
+      switch (this.#mode) {
+        case 'Recursive':
+          this.drawRecursiveTimeState(this.#singleDrawTime);
+      }
+    } else {
+      switch (this.#mode) {
+        case 'Recursive':
+          this.drawRecursive();
+      }
     }
     for (
       let i = 0, point = this.#points[0];
@@ -41,7 +61,30 @@ export default class Bezier {
       i++, point = this.#points[i]
     ) {
       this.#canvas.fillCenteredRect(point.x, point.y, 10, 10, '#00000088');
-      this.#canvas.fillText(i+1, point.x+10, point.y+5);
+      this.#canvas.fillText(i + 1, point.x + 10, point.y + 5);
+    }
+  }
+
+  drawRecursiveTimeState(t) {
+    if (this.#points.length > 1) {
+      this.drawRecursiveTimeStateLines(t);
+      const tPoint = this.recursive(this.#points, t);
+      this.#canvas.fillCircle(tPoint.x, tPoint.y, 5, '#f00');
+    }
+  }
+
+  drawRecursiveTimeStateLines(t, points = this.#points, iteration = 0) {
+    if (points.length > 1) {
+      const nextPoints = [];
+      for (
+        let last = points[0], i = 1, current = points[i];
+        i < points.length;
+        last = points[i], i++, current = points[i]
+      ) {
+        this.#canvas.drawLine(current.x, current.y, last.x, last.y, 3, `hsla(${iteration*20},100%,50%,0.5)`);
+        nextPoints.push(this.recursive([last, current], t));
+      }
+      this.drawRecursiveTimeStateLines(t, nextPoints, iteration+1);
     }
   }
 

@@ -40,3 +40,13 @@ const renderDetail = document.querySelector('#render_detail');
 renderDetail.addEventListener('change', (e) => bz.renderStepCount = renderDetail.value);
 renderDetail.addEventListener('input', (e) => bz.renderStepCount = renderDetail.value);
 bz.renderStepCount = renderDetail.value;
+
+
+const drawSingle = document.querySelector('#draw_single');
+drawSingle.addEventListener('change', (e) => bz.drawSingle = drawSingle.checked);
+bz.drawSingle = drawSingle.checked;
+
+const singlePosition = document.querySelector('#single_position');
+singlePosition.addEventListener('change', (e) => bz.singleDrawTime = singlePosition.value);
+singlePosition.addEventListener('input', (e) => bz.singleDrawTime = singlePosition.value);
+bz.singleDrawTime = singlePosition.value;
