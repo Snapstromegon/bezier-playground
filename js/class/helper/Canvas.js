@@ -35,6 +35,14 @@ export default class Canvas {
     this.#ctx.putImageData(buffer, 0, 0);
   }
 
+  get width() {
+    return this.#canvas.width;
+  }
+
+  get height() {
+    return this.#canvas.height;
+  }
+
   reset() {
     this.#ctx.clearRect(0, 0, c.width, c.height);
   }

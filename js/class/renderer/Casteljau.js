@@ -17,11 +17,6 @@ export default function renderCasteljau(
   if (drawMetaInfo) {
     drawMeta(canvas, curve.points, options);
   }
-
-  for (const [i, point] of curve.points.entries()) {
-    canvas.fillCenteredRect(point.x, point.y, 10, 10, '#00000088');
-    canvas.fillText(i + 1, point.x + 10, point.y + 5);
-  }
 }
 
 /**
@@ -35,27 +30,16 @@ function drawCurve(
   curve,
   { renderResolution, highlightValue = 0 } = {}
 ) {
-  if (curve.points.length > 1) {
-    for (let i = 0; i <= renderResolution; i++) {
-      const t = i / renderResolution;
-      const tPoint = recursive(curve.points, t)[0];
-      canvas.fillCircle(
-        tPoint.x,
-        tPoint.y,
-        isHighlightedValue(highlightValue, i, renderResolution) ? 5 : 3,
-        `#${
-          isHighlightedValue(highlightValue, i, renderResolution) ? 'f' : 'a'
-        }00a`
-      );
-    }
+  if (curve.points.length <= 1) {
+    return;
   }
-}
-
-function isHighlightedValue(target, i, resolution) {
-  const dLower = Math.abs(target - (i == 0 ? Infinity : (i - 1) / resolution));
-  const dUpper = Math.abs(target - (i == 0 ? Infinity : (i + 1) / resolution));
-  const dSelf = Math.abs(target - i / resolution);
-  return dSelf < dLower && dSelf < dUpper;
+  for (let i = 0; i <= renderResolution; i++) {
+    const t = i / renderResolution;
+    const tPoint = recursive(curve.points, t);
+    canvas.fillCircle(tPoint.x, tPoint.y, 3, `#800a`);
+  }
+  const tPoint = recursive(curve.points, highlightValue);
+  canvas.fillCircle(tPoint.x, tPoint.y, 5, `#f00a`);
 }
 
 /**
@@ -65,7 +49,7 @@ function isHighlightedValue(target, i, resolution) {
  */
 function recursive(points, t) {
   // abbort recursion
-  if (points.length <= 1) return points.slice();
+  if (points.length <= 1) return points[0];
 
   // we've got at least 2 points -> reduce them
   const res = [];
@@ -86,23 +70,24 @@ function recursive(points, t) {
 /* Draw Meta Info */
 /******************/
 
-function drawMeta(canvas, points, { highlightValue = 0, iteration = 0 } = {}) {
-  if (points.length > 1) {
-    const nextPoints = [];
-    let last = points[0];
-
-    for (const current of points.slice(1)) {
-      canvas.drawLine(
-        current.x,
-        current.y,
-        last.x,
-        last.y,
-        3,
-        `hsla(${iteration * 20},100%,75%,0.5)`
-      );
-      nextPoints.push(recursive([last, current], highlightValue)[0]);
-      last = current;
-    }
-    drawMeta(canvas, nextPoints, { highlightValue, iteration: iteration + 1 });
+function drawMeta(canvas, points, { highlightValue = 0, t = 0 } = {}) {
+  if (points.length <= 1) {
+    return;
   }
+  const nextPoints = [];
+  let last = points[0];
+
+  for (const current of points.slice(1)) {
+    canvas.drawLine(
+      current.x,
+      current.y,
+      last.x,
+      last.y,
+      3,
+      `hsl(${t * 45},100%,66%)`
+    );
+    nextPoints.push(recursive([last, current], highlightValue));
+    last = current;
+  }
+  drawMeta(canvas, nextPoints, { highlightValue, t: t + 1 });
 }

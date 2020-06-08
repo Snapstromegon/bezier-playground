@@ -22,7 +22,7 @@ export default class Curve {
     let closest;
     let closestDistance = Infinity;
     for (const point of this.points) {
-      const distance = Math.sqrt((point.x - x) ** 2 + (point.y - y) ** 2);
+      const distance = Math.hypot(point.x - x, point.y - y);
       if (distance < closestDistance) {
         closestDistance = distance;
         closest = point;

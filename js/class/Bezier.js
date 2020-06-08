@@ -1,7 +1,8 @@
 import Canvas from './helper/Canvas.js';
 import Point from './Point.js';
-import { default as renderCasteljau } from './renderer/Casteljau.js';
+import renderCasteljau from './renderer/Casteljau.js';
 import Line from './Line.js';
+import renderBernstein from './renderer/Bernstein.js';
 
 export default class Bezier {
   /**
@@ -52,7 +53,20 @@ export default class Bezier {
       highlightValue: this.#singleDrawTime,
     };
     for (const curve of this.line.curves) {
-      renderCasteljau(this.#canvas, curve, options);
+      switch (this.#mode) {
+        default:
+        case 'Recursive':
+          renderCasteljau(this.#canvas, curve, options);
+          break;
+        case 'Bernstein':
+          renderBernstein(this.#canvas, curve, options);
+          break;
+      }
+    }
+
+    for (const [i, point] of this.line.points.entries()) {
+      this.#canvas.fillCenteredRect(point.x, point.y, 10, 10, '#00000088');
+      this.#canvas.fillText(i + 1, point.x + 10, point.y + 5);
     }
   }
 

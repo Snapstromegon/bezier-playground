@@ -44,12 +44,25 @@ export default class Line {
     for (const point of this.curves
       .map((c) => c.getPointAt(x, y, maxDistance))
       .filter(Boolean)) {
-      const distance = Math.sqrt((point.x - x) ** 2 + (point.y - y) ** 2);
+      const distance = Math.hypot(point.x - x, point.y - y);
       if (distance < closestDistance) {
         closestDistance = distance;
         closest = point;
       }
     }
     return closest;
+  }
+
+  get points() {
+    const res = [];
+
+    for (const curve of this.curves) {
+      for (const point of curve.points) {
+        if (point != res.slice(-1)[0]) {
+          res.push(point);
+        }
+      }
+    }
+    return res;
   }
 }
