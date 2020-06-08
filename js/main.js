@@ -1,4 +1,4 @@
-import Canvas from './class/Canvas.js';
+import Canvas from './class/helper/Canvas.js';
 import Bezier from './class/Bezier.js';
 import Point from './class/Point.js';
 
