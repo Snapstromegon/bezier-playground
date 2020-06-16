@@ -14,6 +14,10 @@ export default class Curve {
     this.points.push(point);
   }
 
+  serialize() {
+    return this.points.map((p) => p.serialize());
+  }
+
   get lastPoint() {
     return this.points ? this.points.slice(-1)[0] : undefined;
   }
@@ -29,5 +33,13 @@ export default class Curve {
       }
     }
     return closestDistance <= maxDistance ? closest : undefined;
+  }
+
+  static deserialize(raw_curve) {
+    const curve = new Curve();
+    for (const point of raw_curve) {
+      curve.addPoint(Point.deserialize(point));
+    }
+    return curve;
   }
 }

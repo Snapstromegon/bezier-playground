@@ -13,4 +13,16 @@ export default class Point {
     this.x = x;
     this.y = y;
   }
+
+  duplicate() {
+    return new Point(this.x, this.y);
+  }
+
+  serialize() {
+    return { x: this.x, y: this.y };
+  }
+
+  static deserialize(point) {
+    return new Point(point.x, point.y);
+  }
 }

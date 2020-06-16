@@ -1,6 +1,7 @@
 import Canvas from './class/helper/Canvas.js';
 import Bezier from './class/Bezier.js';
 import Point from './class/Point.js';
+import Line from './class/Line.js';
 
 const domCanvas = document.querySelector('#c');
 
@@ -17,10 +18,12 @@ let isDown = false;
 domCanvas.addEventListener('mousedown', (e) => {
   tmpPoint = bz.getPointAt(e.offsetX, e.offsetY);
   isDown = true;
+  updatePoints();
 });
 
 domCanvas.addEventListener('mouseup', (e) => {
   isDown = false;
+  updatePoints();
 });
 
 domCanvas.addEventListener('mousemove', (e) => {
@@ -28,6 +31,24 @@ domCanvas.addEventListener('mousemove', (e) => {
     tmpPoint.x = e.offsetX;
     tmpPoint.y = e.offsetY;
     bz.draw();
+    updatePoints();
+  }
+});
+
+function updatePoints() {
+  document.querySelector('#points').value = JSON.stringify(
+    bz.line.serialize(),
+    undefined,
+    4
+  );
+}
+
+document.querySelector('#points').addEventListener('change', (e) => {
+  try {
+    bz.line = Line.deserialize(JSON.parse(e.target.value));
+    bz.draw();
+  } catch (e) {
+    console.error(e);
   }
 });
 

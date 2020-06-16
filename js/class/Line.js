@@ -15,6 +15,10 @@ export default class Line {
     this.maxPointsPerCurve = maxPointsPerCurve;
   }
 
+  serialize(){
+    return this.curves.map(c => c.serialize())
+  }
+
   get lastCurve() {
     return this.curves ? this.curves.slice(-1)[0] : undefined;
   }
@@ -30,7 +34,7 @@ export default class Line {
     if (!lastCurve || lastCurve.points.length >= this.maxPointsPerCurve) {
       curve = new Curve();
       if (lastCurve) {
-        curve.addPoint(this.lastCurve.lastPoint);
+        curve.addPoint(this.lastCurve.lastPoint.duplicate());
       }
       this.curves.push(curve);
     }
@@ -64,5 +68,13 @@ export default class Line {
       }
     }
     return res;
+  }
+
+  static deserialize(raw_line) {
+    const line = new Line();
+    for (const curve of raw_line) {
+      line.curves.push(Curve.deserialize(curve));
+    }
+    return line;
   }
 }
