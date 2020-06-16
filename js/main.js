@@ -36,23 +36,30 @@ domCanvas.addEventListener('mousemove', (e) => {
 });
 
 function updatePoints() {
+  const serialized = bz.line.serialize();
   document.querySelector('#points').value = JSON.stringify(
-    bz.line.serialize(),
+    serialized,
     undefined,
     4
   );
+  window.location.hash = JSON.stringify(serialized);
 }
 
-document.querySelector('#points').addEventListener('change', (e) => {
+function setPointsFromString(s) {
   try {
-    bz.line = Line.deserialize(JSON.parse(e.target.value));
+    bz.line = Line.deserialize(JSON.parse(s));
+    console.log(bz.line)
     bz.draw();
+    updatePoints();
   } catch (e) {
     console.error(e);
   }
-});
+}
 
-document.querySelector('#reset').addEventListener('click', () => bz.reset());
+document.querySelector('#reset').addEventListener('click', () => {
+  bz.reset()
+  updatePoints()
+});
 const modeSelector = document.querySelector('#mode');
 modeSelector.addEventListener('change', (e) => (bz.mode = modeSelector.value));
 bz.mode = modeSelector.value;
@@ -85,3 +92,9 @@ singlePosition.addEventListener(
   (e) => (bz.singleDrawTime = singlePosition.value)
 );
 bz.singleDrawTime = singlePosition.value;
+
+setPointsFromString(decodeURI(window.location.hash).substr(1))
+
+document.querySelector('#points').addEventListener('change', (e) => {
+  setPointsFromString(e.target.value);
+});

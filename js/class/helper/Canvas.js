@@ -18,6 +18,8 @@ export default class Canvas {
     this.#canvas = domCanvas;
     this.#ctx = this.#canvas.getContext('2d');
 
+    this.resize();
+
     this.#resizeObserver = new ResizeObserver(() => this.resize());
     this.#resizeObserver.observe(this.#canvas);
   }
