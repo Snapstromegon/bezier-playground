@@ -2,6 +2,10 @@
 
 This repo is a small html/js bezier curve renderer for an university project.
 
+## Use Online
+
+This app is available at https://bezier.hoeser.dev
+
 ## How to use
 
 1. Clone this repo
